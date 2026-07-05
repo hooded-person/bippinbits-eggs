@@ -1,5 +1,17 @@
-import csv
+import csv, sys, pyfiglet
 import datetime as dt
+
+f = pyfiglet.Figlet(font="cybermedium")
+
+c = {
+    "discord": False,
+    "month": False,
+}
+for arg in sys.argv[1:]:
+    if arg == "-d" or arg == "--discord":
+        c["discord"] = True
+    if arg == "-m" or arg == "--month":
+        c["month"] = True
 
 lastDate = dt.date.today()
 
@@ -33,16 +45,30 @@ with open("eggs.csv", newline="") as file:
             year=year,
         )
 
-c = {
-    "month": False,
-}
 
-print("## EGGS")
+def bold(it):
+    if c["discord"]:
+        return "**" + str(it) + "**"
+    else:
+        return "\033[1m" + str(it) + "\033[0m"
+
+
+def header(it):
+    if c["discord"]:
+        return "##" + str(it)
+    else:
+        return f.renderText(str(it))[0:-1]
+
+
+print(header("EGGS"))
 print(f"All time: {data["total"]}")
+print("--------------------")
 for year in data["year"]:
     eggs = data["year"][year]
-    print(f"**{year}**: {eggs} ({data['dpy'][year]} days)")
+    print(f"{bold(year)}: {eggs} ({data['dpy'][year]} days)")
     if c["month"]:
-        for month in data["month"][year]:
-            eggs = data["month"][year][month]
-            print(f"   {month}: {eggs}")
+        for month in range(1, 13):
+            if month in data["month"][year]:
+                eggs = data["month"][year][month]
+                monthStr = (month < 10 and " " or "") + str(month)
+                print(f"   {monthStr}: {eggs}")
