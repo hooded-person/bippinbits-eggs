@@ -1,3 +1,4 @@
+source ./venv/Scripts/activate
 python update.py --once
 python analyse.py
 python parse.py
