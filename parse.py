@@ -4,12 +4,14 @@ import datetime as dt
 f = pyfiglet.Figlet(font="cybermedium")
 
 c = {
-    "discord": False,
+    "type": "rich",
     "month": False,
 }
 for arg in sys.argv[1:]:
     if arg == "-d" or arg == "--discord":
-        c["discord"] = True
+        c["type"] = "discord"
+    elif arg == "-p" or arg == "--plain":
+        c["type"] = "plain"
     if arg == "-m" or arg == "--month":
         c["month"] = True
 
@@ -46,15 +48,17 @@ with open("eggs.csv", newline="") as file:
         )
 
 
-def bold(it):
-    if c["discord"]:
+def bold(it) -> str:
+    if c["type"] == "discord":
         return "**" + str(it) + "**"
-    else:
+    elif c["type"] == "rich":
         return "\033[1m" + str(it) + "\033[0m"
+    else:
+        return str(it)
 
 
-def header(it):
-    if c["discord"]:
+def header(it) -> str:
+    if c["type"] == "discord":
         return "##" + str(it)
     else:
         return f.renderText(str(it))[0:-1]
