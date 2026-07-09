@@ -2,7 +2,7 @@ import sys
 import datetime as dt
 
 max = -1
-if sys.argv[1] == "--once":
+if len(sys.argv) >= 2 and sys.argv[1] == "--once":
     max = 1
 
 lastDate = dt.date.today()
