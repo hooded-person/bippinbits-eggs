@@ -122,20 +122,33 @@ class Plot:
             # integer-like categorical axis
             if isinstance(sample, (int, np.integer)):
                 ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
-            elif is_date_axis:
-                ax.tick_params(axis="x", rotation=45, rotation_mode="anchor")
             else:
-                ax.tick_params(axis="x", rotation=45, rotation_mode="anchor")
+                ax.tick_params(axis="x", rotation=45)
 
 
-cat_order = ["Summary", "This Month", "This Year"]
+cat_order = ["Summary", "This Month", "This Year", "All Time"]
 plots: Dict[str, Plot] = {
     "thisYear": Plot("This Year", "timeseries", cat="This Year"),
     "thisYearPerMonth": Plot("Per Month", "bar", cat="This Year"),
     "thisYearCumulative": Plot("Cumulative This Year", "timeseries", cat="This Year"),
     "thisYearRolling7": Plot("7-day rolling average", "timeseries", cat="This Year"),
     "eggsPerWeek": Plot("Eggs per Week", "bar", cat="This Year"),
+    "thisYearEggCountDistribution": Plot(
+        "Egg count distribution (this year)",
+        "hist.y",
+        cat="This Year",
+    ),
     "thisMonth": Plot("This Month", "timeseries", cat="This Month"),
+    "thisMonthEggCountDistribution": Plot(
+        "Egg count distribution (this month)",
+        "hist.y",
+        cat="This Month",
+    ),
+    "allTimeEggCountDistribution": Plot(
+        "Egg count distribution (all time)",
+        "hist.y",
+        cat="All Time",
+    ),
 }
 
 # today and window for "this month"
@@ -188,10 +201,14 @@ with open("eggs.csv", newline="") as file:
         if date.year == _TODAY.year:
             plots["thisYear"].x.append(date)
             plots["thisYear"].y.append(eggs)
+            plots["thisYearEggCountDistribution"].y.append(eggs)
         # thisMonth: use recent 30-day window rather than calendar month
         if date >= (_TODAY - _MONTH_WINDOW) and date <= _TODAY:
             plots["thisMonth"].x.append(date)
             plots["thisMonth"].y.append(eggs)
+            plots["thisMonthEggCountDistribution"].y.append(eggs)
+
+        plots["allTimeEggCountDistribution"].y.append(eggs)
 
 # processing
 
