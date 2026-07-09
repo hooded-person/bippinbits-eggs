@@ -1,7 +1,7 @@
 # Summary
-- **Total eggs (all time):** 381
-- **Total eggs (2026):** 158
-- **Days recorded (2026):** 174
+- **Total eggs (all time):** 383
+- **Total eggs (2026):** 160
+- **Days recorded (2026):** 175
 - **Average eggs/day (2026):** 0.91
 
 # This Month
